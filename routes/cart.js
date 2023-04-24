@@ -4,10 +4,10 @@ const cartController = require('../controllers/cart');
 
 
 // Cart Routes
-router.get('/', cartController.getAllCarts);
-router.post('/', cartController.createCart);
-router.get('/:id', cartController.getCartById);
-router.put('/:id', cartController.updateCartById);
-router.delete('/:id', cartController.deleteCartById);
+router.get('/cart', cartController.getAllCarts);
+router.post('/cart', cartController.createCart);
+router.get('/cart/:id', cartController.getCartById);
+router.put('/cart/:id', cartController.updateCartById);
+router.delete('/cart/:id', cartController.deleteCartById);
 
 module.exports = router;

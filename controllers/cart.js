@@ -1,4 +1,4 @@
-const Cart = require('../models/cart');
+const Cart = require('../models/cart.js');
 
 // Get all the items
 exports.getAllCarts = async (req, res, next) => {
@@ -14,10 +14,10 @@ exports.getAllCarts = async (req, res, next) => {
 exports.createCart = async (req, res, next) => {
     try {
         const cart = new Cart({
-            user_id: req.body.user_id,
+            username: req.body.username,
             created_at: new Date(),
             updated_at: new Date(),
-            items: [],
+            items: [{product_id, quantity, price, created_at, updated_at}]
         });
         await cart.save();
         res.json({ cart_id: cart.cart_id });
@@ -42,7 +42,7 @@ exports.updateCartById = async (req, res, next) => {
     try {
         const cart = await Cart.findOne({ cart_id: req.params.id });
         if (!cart) return res.status(404).send('Cart not found');
-        if (req.body.user_id) cart.user_id = req.body.user_id;
+        if (req.body.username) cart.username = req.body.username;
         if (req.body.items) cart.items = req.body.items;
         cart.updated_at = new Date();
 

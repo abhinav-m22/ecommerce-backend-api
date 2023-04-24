@@ -31,7 +31,7 @@ exports.createUser = async (req, res, next) => {
         await user.save();
         res.json(user);
     } catch (error) {
-
+        next(error);
     }
 };
 
@@ -67,7 +67,7 @@ exports.updateUser = async(req, res, next) => {
         await user.save();
         res.json(user);
     } catch (error) {
-        next(err);
+        next(error);
     }
 };
 
@@ -75,7 +75,7 @@ exports.updateUser = async(req, res, next) => {
 exports.deleteUser = async (req, res, next) => {
     const { email } = req.email;
     try {
-        const user = await user.findOne({ email });
+        const user = await User.findOne({ email });
         if (!user) return res.status(404).send('user not found');
         await user.remove();
         res.send(`User deleted successfully`);
