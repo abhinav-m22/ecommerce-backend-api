@@ -1,4 +1,6 @@
 const User = require('../models/user.js')
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 
 // Get all the users
 exports.getAllUsers = async (req, res, next) => {
@@ -15,17 +17,20 @@ exports.createUser = async (req, res, next) => {
 
     const { firstname, lastname, username, email, password, street, city, state, zip_code, phone_number } = req.body;
 
+    let user;
     try {
-        const user = new Cart({
-            firstname: firstname,
-            lastname: lastname,
-            username: username,
-            email: email,
-            password: password,
-            address: [{ street, city, state, zip_code }],
-            phone_number: phone_number,
-            created_at: new Date(),
-            updated_at: new Date(),
+        bcrypt.hash(password, saltRounds, async function (err, hash) {
+            user = new Cart({
+                firstname: firstname,
+                lastname: lastname,
+                username: username,
+                email: email,
+                password: hash,
+                address: [{ street, city, state, zip_code }],
+                phone_number: phone_number,
+                created_at: new Date(),
+                updated_at: new Date(),
+            });
         });
 
         await user.save();
@@ -48,19 +53,19 @@ exports.getUserByEmail = async (req, res, next) => {
 };
 
 // Update the user
-exports.updateUser = async(req, res, next) => {
+exports.updateUser = async (req, res, next) => {
     const { firstname, lastname, username, email, street, city, state, zip_code, phone_number } = req.body;
     try {
-        const user = await User.findOne({email});
+        const user = await User.findOne({ email });
         if (!user) return res.status(404).send('User not found');
-        if(firstname) user.firstname = firstname;zip_code
-        if(lastname) user.lastname = lastname;
-        if(username) user.username = username;
-        if(street) user.address.street = street;
-        if(city) user.address.city = city;
-        if(state) user.address.state = state;
-        if(zip_code) user.address.zip_code = zip_code;
-        if(phone_number) user.phone_number = phone_number;
+        if (firstname) user.firstname = firstname; zip_code
+        if (lastname) user.lastname = lastname;
+        if (username) user.username = username;
+        if (street) user.address.street = street;
+        if (city) user.address.city = city;
+        if (state) user.address.state = state;
+        if (zip_code) user.address.zip_code = zip_code;
+        if (phone_number) user.phone_number = phone_number;
 
         user.updated_at = new Date();
 
